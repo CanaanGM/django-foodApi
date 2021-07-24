@@ -2,6 +2,7 @@ version: "3"
 
 services: 
   foodapi:
+    container_name: django_foodApi
     build:
       context: .
     ports:
@@ -9,4 +10,22 @@ services:
     volumes: 
       - ./app:/app
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db && 
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    depends_on: 
+      - postgressdb
+    environment: 
+      - DB_HOST=postgressdb
+      - DB_NAME=foodapi
+      - DB_USER=postgres
+      - DB_PASS=encryptedenvironemntvarholder
+  
+  postgressdb:
+    container_name: postgres_database
+    image: postgres:10-alpine
+    restart: always
+    environment: 
+      - POSTGRES_DB=foodapi
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=encryptedenvironemntvarholder
