@@ -8,7 +8,7 @@ class AdminSiteTest(TestCase):
         """Setup wooo hooo """
 
         self.client = Client()
-        self.admin_user = get_user_model().objects.create_supauser(
+        self.admin_user = get_user_model().objects.create_superuser(
             "test@test.com",
             "selfandtiiime"
         )
